@@ -14,10 +14,10 @@
   --paper: #fafaf8;
   --rule: #d8d5ce;
   --rule-light: #eceae4;
-  --text-primary: #1a1a18;
-  --text-secondary: #4a4a45;
-  --text-tertiary: #8a8a82;
-  --text-muted: #b5b3aa;
+  --text-primary: #0a0a08;
+  --text-secondary: #1e1e1a;
+  --text-tertiary: #3a3a34;
+  --text-muted: #5a5a52;
   --mckinsey-blue: #051c2c;
   --mckinsey-mid: #193a52;
   --accent-blue: #1b6ca8;
@@ -1384,9 +1384,9 @@ const HOSPITAL_TYPES = [{"Type":"CAH","total":1452,"closed":71,"avg_margin":6.49
 // ─── CHART GLOBALS ───
 Chart.defaults.font.family = "'IBM Plex Mono', monospace";
 Chart.defaults.font.size = 10;
-Chart.defaults.color = '#8a8a82';
+Chart.defaults.color = '#2a2a24';
 
-const GRID = 'rgba(216,213,206,0.6)';
+const GRID = 'rgba(180,176,168,0.6)';
 const NAVY = '#051c2c';
 const BLUE = '#1b6ca8';
 const RED = '#c0392b';
@@ -1403,8 +1403,8 @@ const baseOpts = {
       backgroundColor: '#ffffff',
       borderColor: '#d8d5ce',
       borderWidth: 1,
-      titleColor: '#1a1a18',
-      bodyColor: '#4a4a45',
+      titleColor: '#0a0a08',
+      bodyColor: '#1e1e1a',
       padding: 12,
       cornerRadius: 0,
       titleFont: { family: "'EB Garamond', serif", size: 14, weight: '500' },
@@ -1412,8 +1412,8 @@ const baseOpts = {
     }
   },
   scales: {
-    x: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#8a8a82' } },
-    y: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#8a8a82' } }
+    x: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#2a2a24' } },
+    y: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#2a2a24' } }
   }
 };
 
@@ -1439,7 +1439,7 @@ function buildCharts() {
         borderRadius: 1, borderSkipped: false
       }]
     },
-    options: { ...baseOpts, scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { stepSize: 5, color: '#8a8a82' } } } }
+    options: { ...baseOpts, scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { stepSize: 5, color: '#2a2a24' } } } }
   });
 
   // Type closure rate
@@ -1462,7 +1462,7 @@ function buildCharts() {
       ...baseOpts,
       indexAxis: 'y',
       scales: {
-        x: { ...baseOpts.scales.x, ticks: { callback: v => v + '%', color: '#8a8a82' } },
+        x: { ...baseOpts.scales.x, ticks: { callback: v => v + '%', color: '#2a2a24' } },
         y: { ...baseOpts.scales.y }
       }
     }
@@ -1480,8 +1480,8 @@ function buildCharts() {
     },
     options: {
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
-      scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#8a8a82' } } }
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#1e1e1a', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#2a2a24' } } }
     }
   });
 
@@ -1517,8 +1517,8 @@ function buildCharts() {
     },
     options: {
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
-      scales: { x: { ...baseOpts.scales.x, ticks: { maxRotation: 45, color: '#8a8a82' } }, y: baseOpts.scales.y }
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#1e1e1a', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: { ...baseOpts.scales.x, ticks: { maxRotation: 45, color: '#2a2a24' } }, y: baseOpts.scales.y }
     }
   });
 
@@ -1535,8 +1535,8 @@ function buildCharts() {
     },
     options: {
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
-      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#8a8a82' } } }
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#1e1e1a', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#2a2a24' } } }
     }
   });
 
@@ -1558,7 +1558,7 @@ function buildCharts() {
     },
     options: {
       ...baseOpts,
-      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => '$' + v + 'M', color: '#8a8a82' } } }
+      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => '$' + v + 'M', color: '#2a2a24' } } }
     }
   });
 }
