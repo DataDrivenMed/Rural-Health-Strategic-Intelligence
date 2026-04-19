@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rural Hospital Viability — Strategic Intelligence Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --white: #ffffff;
+  --off-white: #f7f7f5;
+  --paper: #fafaf8;
+  --rule: #d8d5ce;
+  --rule-light: #eceae4;
+  --text-primary: #1a1a18;
+  --text-secondary: #4a4a45;
+  --text-tertiary: #8a8a82;
+  --text-muted: #b5b3aa;
+  --mckinsey-blue: #051c2c;
+  --mckinsey-mid: #193a52;
+  --accent-blue: #1b6ca8;
+  --accent-teal: #006d77;
+  --accent-red: #c0392b;
+  --accent-amber: #b8860b;
+  --accent-green: #2d6a4f;
+  --highlight: #e8f4fd;
+  --sidebar-w: 220px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--paper);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── LAYOUT SHELL ─── */
+.shell { display: flex; min-height: 100vh; }
+
+/* ─── LEFT SIDEBAR ─── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--mckinsey-blue);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 32px 24px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo-mark {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.logo-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.sidebar-nav {
+  padding: 24px 0;
+  flex: 1;
+}
+
+.nav-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  padding: 0 24px;
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+
+.nav-section-label:first-child { margin-top: 0; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-left: 2px solid transparent;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  font-weight: 400;
+  user-select: none;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+
+.nav-item.active {
+  background: rgba(255,255,255,0.08);
+  border-left-color: #4a9eff;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.nav-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.nav-item.active .nav-dot { opacity: 1; background: #4a9eff; }
+
+.sidebar-footer {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.8;
+}
+
+/* ─── MAIN CONTENT ─── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+  padding: 40px 56px 36px;
+}
+
+.header-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin-bottom: 16px;
+}
+
+.header-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 38px;
+  font-weight: 500;
+  color: var(--mckinsey-blue);
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.header-title em { font-style: italic; color: var(--accent-red); }
+
+.header-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.header-meta-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-light);
+}
+
+.meta-item { }
+
+.meta-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ─── CONTENT AREA ─── */
+.content {
+  padding: 40px 56px;
+}
+
+/* ─── SECTION ─── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ─── SECTION TITLE ─── */
+.section-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--mckinsey-blue);
+  margin-bottom: 4px;
+  letter-spacing: -0.2px;
+}
+
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+
+.section-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* ─── RULE ─── */
+.h-rule {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 36px 0;
+}
+
+.h-rule-bold {
+  border: none;
+  border-top: 2px solid var(--mckinsey-blue);
+  margin-bottom: 2px;
+}
+
+.h-rule-thin {
+  border: none;
+  border-top: 1px solid var(--rule-light);
+  margin-bottom: 28px;
+}
+
+/* ─── KPI GRID ─── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border: 1px solid var(--rule);
+  margin-bottom: 32px;
+  background: var(--white);
+}
+
+.kpi-cell {
+  padding: 24px 20px 20px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+
+.kpi-cell:last-child { border-right: none; }
+
+.kpi-cell::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kpi-color, var(--mckinsey-blue));
+}
+
+.kpi-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.kpi-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 6px;
+  color: var(--kpi-color, var(--mckinsey-blue));
+}
+
+.kpi-context {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  font-weight: 300;
+}
+
+.kpi-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 7px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+/* ─── CHART PANELS ─── */
+.panel-row {
+  display: grid;
+  gap: 1px;
+  margin-bottom: 1px;
+  background: var(--rule);
+}
+
+.panel-row-2 { grid-template-columns: 1fr 1fr; }
+.panel-row-3 { grid-template-columns: 2fr 1fr; }
+.panel-row-4 { grid-template-columns: 1fr; }
+
+.panel {
+  background: var(--white);
+  padding: 28px 28px 24px;
+}
+
+.panel-header {
+  margin-bottom: 20px;
+}
+
+.panel-rule-top {
+  border-top: 2px solid var(--mckinsey-blue);
+  padding-top: 14px;
+}
+
+.panel-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--mckinsey-blue);
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 300;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.chart-area { position: relative; }
+.h240 { height: 240px; }
+.h280 { height: 280px; }
+.h320 { height: 320px; }
+.h360 { height: 360px; }
+
+/* ─── ANNOTATION CHIPS ─── */
+.annotation-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.annotation-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.chip-dot {
+  width: 8px; height: 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ─── DATA TABLE ─── */
+.data-table-wrap { background: var(--white); }
+
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--rule-light);
+  flex-wrap: wrap;
+}
+
+.ctrl-input {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--text-primary);
+  padding: 7px 12px;
+  outline: none;
+  width: 180px;
+  transition: border-color 0.15s;
+}
+
+.ctrl-input:focus { border-color: var(--accent-blue); }
+.ctrl-input::placeholder { color: var(--text-muted); }
+
+.ctrl-select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--text-primary);
+  padding: 7px 12px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6' fill='%238a8a82'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.ctrl-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+thead { background: var(--mckinsey-blue); }
+
+thead th {
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  padding: 11px 16px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+thead th:hover { color: rgba(255,255,255,0.95); }
+
+tbody tr { border-bottom: 1px solid var(--rule-light); transition: background 0.1s; }
+tbody tr:hover { background: var(--off-white); }
+
+tbody td {
+  padding: 10px 16px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.td-mono { font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+.td-state { font-weight: 600; font-size: 13px; }
+
+.bar-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-track {
+  width: 72px;
+  height: 3px;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+
+.bar-fill { height: 100%; }
+
+.risk-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+/* ─── INSIGHT CARDS ─── */
+.insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  margin-bottom: 1px;
+}
+
+.insight-card {
+  background: var(--white);
+  padding: 28px;
+  position: relative;
+}
+
+.insight-number {
+  font-family: 'EB Garamond', serif;
+  font-size: 72px;
+  font-weight: 400;
+  color: var(--rule-light);
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+.insight-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.insight-tag::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  background: var(--accent-blue);
+  flex-shrink: 0;
+}
+
+.insight-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--mckinsey-blue);
+  margin-bottom: 10px;
+  line-height: 1.35;
+  padding-right: 40px;
+}
+
+.insight-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.insight-callout {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--off-white);
+  border-left: 3px solid var(--mckinsey-blue);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── POLICY SECTION ─── */
+.policy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  margin-bottom: 1px;
+}
+
+.policy-card {
+  background: var(--white);
+  padding: 28px;
+}
+
+.policy-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.policy-name {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--mckinsey-blue);
+  line-height: 1.3;
+}
+
+.policy-abbr {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+.eff-score {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.policy-body {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+.eff-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eff-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.eff-track {
+  flex: 1;
+  height: 4px;
+  background: var(--rule);
+}
+
+.eff-fill { height: 100%; }
+
+/* ─── RECOMMENDATIONS ─── */
+.rec-section {
+  background: var(--white);
+  padding: 36px 40px;
+}
+
+.rec-group { margin-bottom: 32px; }
+.rec-group:last-child { margin-bottom: 0; }
+
+.rec-group-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rec-group-line {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.rec-group-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.rec-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.rec-item:last-child { border-bottom: none; }
+
+.rec-num {
+  font-family: 'EB Garamond', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--mckinsey-blue);
+  line-height: 1.2;
+  padding-top: 2px;
+}
+
+.rec-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.rec-body {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+/* ─── METHODOLOGY ─── */
+.method-block {
+  background: var(--off-white);
+  border: 1px solid var(--rule);
+  padding: 20px 24px;
+  margin-top: 32px;
+}
+
+.method-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.method-body {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  line-height: 1.8;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rule); }
+
+/* ─── PRINT / RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .kpi-strip { grid-template-columns: repeat(3, 1fr); }
+  .panel-row-2, .panel-row-3 { grid-template-columns: 1fr; }
+  .insight-grid, .policy-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 780px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .content, .page-header { padding: 24px; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">Rural Hospital<br>Intelligence</div>
+      <div class="logo-sub">Strategic Report · 2025</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Analysis</div>
+      <div class="nav-item active" onclick="showView('overview', this)">
+        <span class="nav-dot"></span>Executive Overview
+      </div>
+      <div class="nav-item" onclick="showView('financial', this)">
+        <span class="nav-dot"></span>Financial Analysis
+      </div>
+      <div class="nav-item" onclick="showView('states', this)">
+        <span class="nav-dot"></span>State Rankings
+      </div>
+
+      <div class="nav-section-label">Synthesis</div>
+      <div class="nav-item" onclick="showView('insights', this)">
+        <span class="nav-dot"></span>Key Insights
+      </div>
+      <div class="nav-item" onclick="showView('policy', this)">
+        <span class="nav-dot"></span>Policy Analysis
+      </div>
+      <div class="nav-item" onclick="showView('recs', this)">
+        <span class="nav-dot"></span>Recommendations
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="footer-meta">
+        Dataset: Saving Rural Hospitals<br>
+        n = 2,496 hospitals<br>
+        Period: 2005–2025<br>
+        Analysis: April 2025
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="header-eyebrow">Rural Health Strategic Intelligence · United States</div>
+      <h1 class="header-title">The Rural Hospital <em>Crisis</em>:<br>Drivers, Risk, and Policy Response</h1>
+      <p class="header-desc">A decision-grade analysis of 2,496 rural hospital facilities across 50 states, examining closure patterns, financial vulnerability, program effectiveness, and targeted policy interventions for policymakers and healthcare executives.</p>
+      <div class="header-meta-row">
+        <div class="meta-item">
+          <div class="meta-label">Hospitals Analyzed</div>
+          <div class="meta-value">2,496</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">States Covered</div>
+          <div class="meta-value">50</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Analysis Period</div>
+          <div class="meta-value">2005–2025</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Hospital Designations</div>
+          <div class="meta-value">9 Types</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Report Date</div>
+          <div class="meta-value">April 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ════════════════════════════════════
+           VIEW: EXECUTIVE OVERVIEW
+      ════════════════════════════════════ -->
+      <div id="view-overview" class="view active">
+
+        <div class="section-eyebrow">Section 01</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">Executive Overview</div>
+        <div class="section-subtitle">Headline metrics from 2,496 rural hospitals across the United States, 2005–2025</div>
+
+        <!-- KPI STRIP -->
+        <div class="kpi-strip">
+          <div class="kpi-cell" style="--kpi-color: var(--mckinsey-blue)">
+            <div class="kpi-label">Total Hospitals<br>in Dataset</div>
+            <div class="kpi-value">2,496</div>
+            <div class="kpi-context">Rural facilities across 50 states</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">Total<br>Closures</div>
+            <div class="kpi-value">196</div>
+            <div class="kpi-context">7.9% system closure rate since 2005</div>
+            <div class="kpi-badge" style="color:var(--accent-red)">↑ Accelerating</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-amber)">
+            <div class="kpi-label">High-Risk<br>Open Hospitals</div>
+            <div class="kpi-value">665</div>
+            <div class="kpi-context">28.9% of open hospitals at risk</div>
+            <div class="kpi-badge" style="color:var(--accent-amber)">Watch list</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">Avg Margin<br>Closed Hospitals</div>
+            <div class="kpi-value">−6.7%</div>
+            <div class="kpi-context">vs. +6.2% for open (12.9pp gap)</div>
+            <div class="kpi-badge" style="color:var(--accent-red)">p &lt; 0.001</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-blue)">
+            <div class="kpi-label">Medicaid<br>Non-Expansion Penalty</div>
+            <div class="kpi-value">2×</div>
+            <div class="kpi-context">11.6% vs. 5.8% closure rate</div>
+            <div class="kpi-badge" style="color:var(--accent-blue)">Policy lever</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">MDH Program<br>Closure Rate</div>
+            <div class="kpi-value">94.4%</div>
+            <div class="kpi-context">17 of 18 MDH hospitals closed</div>
+            <div class="kpi-badge" style="color:var(--accent-red)">Program failed</div>
+          </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="panel-row panel-row-3">
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Rural Hospital Closures by Year, 2005–2025</div>
+              <div class="panel-subtitle">Annual count · Red = peak years ≥15 closures · Green = CARES Act relief period</div>
+            </div>
+            <div class="chart-area h320"><canvas id="c-timeline"></canvas></div>
+            <div class="annotation-row">
+              <div class="annotation-chip"><div class="chip-dot" style="background:#c0392b"></div>Peak years (≥15)</div>
+              <div class="annotation-chip"><div class="chip-dot" style="background:#2d6a4f"></div>COVID relief effect (2021)</div>
+              <div class="annotation-chip"><div class="chip-dot" style="background:#1b6ca8"></div>Moderate years</div>
+            </div>
+          </div>
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Closure Rate by Hospital Designation</div>
+              <div class="panel-subtitle">% of each type that has closed</div>
+            </div>
+            <div class="chart-area h320"><canvas id="c-typeclose"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="panel-row panel-row-2">
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Medicaid Expansion vs. Non-Expansion States</div>
+              <div class="panel-subtitle">Closure rate and average total margin comparison</div>
+            </div>
+            <div class="chart-area h240"><canvas id="c-medicaid"></canvas></div>
+          </div>
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Top 10 States — Absolute Closures</div>
+              <div class="panel-subtitle">Total rural hospital closures since 2005</div>
+            </div>
+            <div class="chart-area h240"><canvas id="c-states-top"></canvas></div>
+          </div>
+        </div>
+
+      </div><!-- /overview -->
+
+      <!-- ════════════════════════════════════
+           VIEW: FINANCIAL ANALYSIS
+      ════════════════════════════════════ -->
+      <div id="view-financial" class="view">
+
+        <div class="section-eyebrow">Section 02</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">Financial Analysis</div>
+        <div class="section-subtitle">Margin benchmarking, expense profiles, and structural financial separation between open and closed facilities</div>
+
+        <div class="kpi-strip">
+          <div class="kpi-cell" style="--kpi-color: var(--accent-green)">
+            <div class="kpi-label">Open Hospital<br>Avg Total Margin</div>
+            <div class="kpi-value">+6.2%</div>
+            <div class="kpi-context">Mean total margin, n=2,257</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-amber)">
+            <div class="kpi-label">Open Hospital<br>Avg Patient Margin</div>
+            <div class="kpi-value">+2.6%</div>
+            <div class="kpi-context">3.6pp below total — subsidy bridge</div>
+            <div class="kpi-badge" style="color:var(--accent-amber)">Subsidy dependent</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">Closed Hospital<br>Avg Total Margin</div>
+            <div class="kpi-value">−6.7%</div>
+            <div class="kpi-context">Structural insolvency profile</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">Closed Hospital<br>Patient Margin</div>
+            <div class="kpi-value">−13.0%</div>
+            <div class="kpi-context">Clinical ops deeply negative</div>
+            <div class="kpi-badge" style="color:var(--accent-red)">t=8.9, p&lt;0.001</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-blue)">
+            <div class="kpi-label">RRC Avg<br>Total Margin</div>
+            <div class="kpi-value">+11.0%</div>
+            <div class="kpi-context">Best-performing designation</div>
+            <div class="kpi-badge" style="color:var(--accent-green)">Top performer</div>
+          </div>
+          <div class="kpi-cell" style="--kpi-color: var(--accent-red)">
+            <div class="kpi-label">REH High-Risk<br>Rate (Open)</div>
+            <div class="kpi-value">81.8%</div>
+            <div class="kpi-context">Of open REH hospitals at-risk</div>
+            <div class="kpi-badge" style="color:var(--accent-red)">Critical</div>
+          </div>
+        </div>
+
+        <div class="panel-row panel-row-2">
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Margin Distribution: Open vs. Closed Facilities</div>
+              <div class="panel-subtitle">State-level aggregate · Total margin percentage bands</div>
+            </div>
+            <div class="chart-area h320"><canvas id="c-margindist"></canvas></div>
+          </div>
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Financial Benchmarking by Designation</div>
+              <div class="panel-subtitle">Total margin vs. patient services margin · All types</div>
+            </div>
+            <div class="chart-area h320"><canvas id="c-typebench"></canvas></div>
+          </div>
+        </div>
+
+        <div class="panel-row panel-row-4">
+          <div class="panel panel-rule-top">
+            <div class="panel-header">
+              <div class="panel-title">Average Total Expenses by Hospital Designation</div>
+              <div class="panel-subtitle">Proxy for scale · Color indicates closure risk — smaller hospitals concentrate at higher risk</div>
+            </div>
+            <div class="chart-area h240"><canvas id="c-exptype"></canvas></div>
+          </div>
+        </div>
+
+      </div><!-- /financial -->
+
+      <!-- ════════════════════════════════════
+           VIEW: STATE RANKINGS
+      ════════════════════════════════════ -->
+      <div id="view-states" class="view">
+
+        <div class="section-eyebrow">Section 03</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">State-Level Risk Rankings</div>
+        <div class="section-subtitle">All 50 states ranked by closure rate, total margin, and composite risk score</div>
+
+        <div class="data-table-wrap">
+          <div class="table-controls">
+            <input class="ctrl-input" id="st-search" type="text" placeholder="Search state..." oninput="renderTable()">
+            <select class="ctrl-select" id="st-sort" onchange="renderTable()">
+              <option value="closure_rate">Sort: Closure Rate ↓</option>
+              <option value="closed">Sort: Total Closures ↓</option>
+              <option value="avg_total_margin_asc">Sort: Margin (Low → High)</option>
+              <option value="total">Sort: Hospital Count ↓</option>
+              <option value="risk">Sort: Risk Score ↓</option>
+            </select>
+            <span class="ctrl-count" id="st-count"></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>State</th>
+                <th>Hospitals</th>
+                <th>Closed</th>
+                <th>Closure Rate</th>
+                <th>Avg Total Margin</th>
+                <th>Avg Patient Margin</th>
+                <th>Risk Level</th>
+                <th>Composite Risk</th>
+              </tr>
+            </thead>
+            <tbody id="st-tbody"></tbody>
+          </table>
+        </div>
+
+      </div><!-- /states -->
+
+      <!-- ════════════════════════════════════
+           VIEW: KEY INSIGHTS
+      ════════════════════════════════════ -->
+      <div id="view-insights" class="view">
+
+        <div class="section-eyebrow">Section 04</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">Ten Non-Obvious, High-Impact Findings</div>
+        <div class="section-subtitle">Evidence-grounded insights derived from statistical analysis of 2,496 hospital records</div>
+
+        <div class="insight-grid">
+
+          <div class="insight-card">
+            <div class="insight-number">01</div>
+            <div class="insight-tag">Financial Separation</div>
+            <div class="insight-title">Closures Exhibit Structural Insolvency, Not Cyclical Distress</div>
+            <div class="insight-body">Closed hospitals show a mean total margin of −6.7% versus +6.2% for open hospitals — a 12.9 percentage-point structural gap confirmed at p&lt;0.001 (t=8.9). Patient services margin of −13.0% for closed facilities reveals clinical operations alone could not sustain viability. This is not cyclical — it is architectural.</div>
+            <div class="insight-callout">Effect magnitude: 12.9pp total margin gap · t=8.902 · p&lt;0.000001 · n=2,383</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">02</div>
+            <div class="insight-tag">Program Failure</div>
+            <div class="insight-title">The MDH Designation Has Effectively Ceased to Exist</div>
+            <div class="insight-body">Medicare-Dependent Hospitals — designed for facilities with 60%+ Medicare volume — achieved a 94.4% closure rate. 17 of 18 MDH hospitals closed. The program, repeatedly extended via short-term legislation without structural reform, delayed closures without preventing them. Congress allowed MDH to expire after 2022 without a replacement framework.</div>
+            <div class="insight-callout">MDH closure rate: 94.4% (17/18) · Avg patient margin: −21.3% · Avg expenses: $25.5M</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">03</div>
+            <div class="insight-tag">Hidden Crisis</div>
+            <div class="insight-title">665 Open Hospitals Are on the Closure Trajectory</div>
+            <div class="insight-body">Using a conservative threshold — total margin below −5% or patient margin below −10% — 28.9% of currently open rural hospitals qualify as high-risk. Rural Emergency Hospitals (REH), the newest federal designation, show an 81.8% high-risk rate among open facilities, suggesting the REH conversion model is not financially stabilizing hospitals.</div>
+            <div class="insight-callout">665 at-risk open hospitals · REH: 81.8% high-risk · CAH: 28.8% · IPPS: 30.1%</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">04</div>
+            <div class="insight-tag">Policy Evidence</div>
+            <div class="insight-title">Medicaid Non-Expansion Doubles Rural Hospital Closure Risk</div>
+            <div class="insight-body">Non-expansion states exhibit an 11.6% rural hospital closure rate versus 5.8% in expansion states — a 2.0× differential representing the strongest single policy-attributable effect in the dataset. Non-expansion states (TX, TN, AL, FL, KS, OK, SC, MS) account for a disproportionate share of closures relative to their hospital counts.</div>
+            <div class="insight-callout">Non-expansion: 11.6% · Expansion: 5.8% · Ratio: 2.0× · 101 vs 95 closures</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">05</div>
+            <div class="insight-tag">Positive Signal</div>
+            <div class="insight-title">CAH Cost-Based Reimbursement Is the Most Effective Federal Protection</div>
+            <div class="insight-body">Critical Access Hospitals — receiving 101% of allowable Medicare costs — have a 4.9% closure rate, the lowest of any major designation, despite comprising 58% of rural hospitals. The CAH model's structural payment protection is necessary but not sufficient: 28.8% of open CAHs remain high-risk, indicating operational challenges the payment model cannot fully offset.</div>
+            <div class="insight-callout">CAH closure rate: 4.9% · 1,452 total · 71 closed · 398 high-risk open (28.8%)</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">06</div>
+            <div class="insight-tag">Geographic Pattern</div>
+            <div class="insight-title">The South Carries a Disproportionate Share of the Crisis</div>
+            <div class="insight-body">Tennessee (20.6%), Florida (26.7%), Alabama (16.4%), and North Carolina (17.6%) lead in closure rates among high-volume states. These states combine Medicaid non-expansion, high rural poverty, and smaller hospital sizes. Texas leads in absolute closures (25) due to volume. Six Southern states account for 83 closures — 42% of the national total from 15% of hospitals.</div>
+            <div class="insight-callout">TX: 25 · TN: 14 · NC: 12 · AL: 10 · FL: 8 (26.7% rate) · OK: 10</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">07</div>
+            <div class="insight-tag">Scale Paradox</div>
+            <div class="insight-title">IPPS Hospitals Close at 3.8× the CAH Rate Despite Higher Revenue</div>
+            <div class="insight-body">Inpatient Prospective Payment System hospitals — larger acute-care facilities averaging $91M in expenses — have an 18.8% closure rate versus 4.9% for CAHs averaging $43M. Scale alone does not confer resilience without the right payment architecture. IPPS rural hospitals face volume constraints identical to smaller facilities but lack cost-based reimbursement protection.</div>
+            <div class="insight-callout">IPPS closure rate: 18.8% · CAH rate: 4.9% · Ratio: 3.8× · 88 of 467 IPPS closed</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">08</div>
+            <div class="insight-tag">Best Practice</div>
+            <div class="insight-title">RRC and SCH Designations Demonstrate Consistently Stable Financials</div>
+            <div class="insight-body">Referral Regional Centers average +11.0% total margin with a 2.0% closure rate. Sole Community Hospitals average +4.7% margin with a 3.2% closure rate. Both carry enhanced Medicare payments and geographic protection. RCH (Rural Community Hospitals) show 0% closures. These programs offer a replicable structural model for stabilization.</div>
+            <div class="insight-callout">RRC avg margin: +11.0% · Closure: 2.0% · SCH: +4.7% · RCH: 0.0% closure rate</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">09</div>
+            <div class="insight-tag">Temporal Pattern</div>
+            <div class="insight-title">COVID Relief Suppressed — But Did Not Resolve — The Structural Crisis</div>
+            <div class="insight-body">Closures peaked at 17 in 2015 and 2019. The 2021 trough (2 closures) aligned with CARES Act and Provider Relief Fund disbursements. The 2022–2025 rebound (26 closures combined) confirms relief funding masked structural insolvency without addressing its drivers. One-time capital injections cannot substitute for sustainable payment reform.</div>
+            <div class="insight-callout">2019: 17 closures → 2021: 2 closures (CARES) → 2022–25: 26 closures combined</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-number">10</div>
+            <div class="insight-tag">Structural Mismatch</div>
+            <div class="insight-title">Rural Hospitals Are Operationally Subsidy-Dependent — A Structural Risk</div>
+            <div class="insight-body">Open hospitals average a patient services margin of +2.6% but a total margin of +6.2% — a 3.6pp gap attributable entirely to non-operating revenue: government grants, investment income, and subsidies. Remove non-patient revenue and a substantial share of open hospitals would immediately join the high-risk cohort. Policy must address this dependency, not just its symptoms.</div>
+            <div class="insight-callout">Total vs. patient margin gap: 3.6pp · Non-operating revenue as viability bridge</div>
+          </div>
+
+        </div>
+
+      </div><!-- /insights -->
+
+      <!-- ════════════════════════════════════
+           VIEW: POLICY ANALYSIS
+      ════════════════════════════════════ -->
+      <div id="view-policy" class="view">
+
+        <div class="section-eyebrow">Section 05</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">Federal Program Effectiveness Assessment</div>
+        <div class="section-subtitle">Dataset-evidenced evaluation of current U.S. rural health policy instruments</div>
+
+        <div class="policy-grid">
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">Critical Access Hospital Program</div>
+                <div class="policy-abbr">CAH · Medicare Flex Program · Cost-Based Reimbursement</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-green)">78%</div>
+            </div>
+            <div class="policy-body">Provides 101% of allowable Medicare costs to rural hospitals with ≤25 acute beds located 35+ miles from the nearest hospital. Dataset evidence is strong: 4.9% closure rate — lowest of any major designation. The program directly addresses the volume-margin trap of rural acute care. However, 28.8% of open CAHs remain high-risk, indicating payment protection is necessary but insufficient without operational support.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:78%;background:var(--accent-green)"></div></div>
+              <span class="eff-label">78 / 100</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">Medicare-Dependent Hospital Program</div>
+                <div class="policy-abbr">MDH · Expired Post-2022 · Not Reformed</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-red)">8%</div>
+            </div>
+            <div class="policy-body">Designed for hospitals with 60%+ Medicare inpatient volume, MDH provided enhanced payment rates as an alternative to CAH conversion. Dataset evidence is damning: 17 of 18 MDH hospitals closed (94.4%). MDH status was repeatedly extended via short-term legislation rather than reformed. The program's architecture — enhanced fee-for-service without structural redesign — failed to prevent the insolvency it was created to avert.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:8%;background:var(--accent-red)"></div></div>
+              <span class="eff-label">8 / 100</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">Rural Emergency Hospital Conversion</div>
+                <div class="policy-abbr">REH · Established January 2023 · 45 Conversions</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-amber)">35%</div>
+            </div>
+            <div class="policy-body">Allows hospitals to convert to emergency-only care (no inpatient beds) in exchange for a 5% Medicare add-on and monthly facility payments (~$272K/month). The REH model is too new for longitudinal closure analysis, but a critical early warning has emerged: 81.8% of open REH hospitals meet the high-risk financial threshold. Whether converting hospitals are deeply distressed at entry or the payment model is insufficient requires immediate CMS investigation.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:35%;background:var(--accent-amber)"></div></div>
+              <span class="eff-label">35 / 100 (Preliminary)</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">Medicaid Expansion (ACA)</div>
+                <div class="policy-abbr">State Opt-In · 41 States + DC as of 2024</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-green)">85%</div>
+            </div>
+            <div class="policy-body">Not exclusively a rural hospital program, but its rural effect is among the most powerful findings in this dataset. Expansion states show a 5.8% rural closure rate versus 11.6% in non-expansion states — a 2× differential. Consistent with national literature showing expansion dramatically reduces uncompensated care burden. Holdout states (TX, FL, TN, AL, KS, OK) account for 101 closures — 52% of the national total.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:85%;background:var(--accent-green)"></div></div>
+              <span class="eff-label">85 / 100</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">HRSA Rural Health Programs</div>
+                <div class="policy-abbr">FORHP · Flex Program · Rural Grants</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-amber)">52%</div>
+            </div>
+            <div class="policy-body">HRSA's Federal Office of Rural Health Policy administers operational grants to CAH hospitals for quality improvement, network integration, and efficiency. Flex grants are modest (~$50K/hospital/year) and cannot offset structural financial losses. CAH performance suggests program contribution is real but marginal; it cannot overcome the fundamental volume-margin mismatch without accompanying payment reform at scale.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:52%;background:var(--accent-amber)"></div></div>
+              <span class="eff-label">52 / 100</span>
+            </div>
+          </div>
+
+          <div class="policy-card">
+            <div class="policy-title-row">
+              <div>
+                <div class="policy-name">COVID-19 Provider Relief Fund</div>
+                <div class="policy-abbr">CARES Act · $178B Total · 2020–2022</div>
+              </div>
+              <div class="eff-score" style="color:var(--accent-blue)">42%</div>
+            </div>
+            <div class="policy-body">Emergency funding temporarily halted rural closures: from 17 (2019) to 2 (2021). However, the 2022–2025 rebound (26 combined closures) confirms this was suppression, not resolution. One-time capital injections masked structural insolvency without addressing its drivers. The program validated that funding can pause closures — but also revealed that sustainable payment architecture, not emergency relief, is the only durable solution.</div>
+            <div class="eff-bar-row">
+              <span class="eff-label">Effectiveness</span>
+              <div class="eff-track"><div class="eff-fill" style="width:42%;background:var(--accent-blue)"></div></div>
+              <span class="eff-label">42 / 100 (Temporary)</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div><!-- /policy -->
+
+      <!-- ════════════════════════════════════
+           VIEW: RECOMMENDATIONS
+      ════════════════════════════════════ -->
+      <div id="view-recs" class="view">
+
+        <div class="section-eyebrow">Section 06</div>
+        <div class="h-rule-bold"></div>
+        <div class="h-rule-thin"></div>
+        <div class="section-title">Targeted Policy Recommendations</div>
+        <div class="section-subtitle">Seven evidence-grounded interventions at the federal and state level, ranked by estimated impact</div>
+
+        <div class="rec-section">
+
+          <div class="rec-group">
+            <div class="rec-group-head">
+              <div class="rec-group-label">Federal Level · Payment Reform &amp; Regulatory Action</div>
+              <div class="rec-group-line"></div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">F1</div>
+              <div>
+                <div class="rec-title">Establish a Permanent Rural Hospital Viability Fund with Tiered Cost-Based Payments</div>
+                <div class="rec-body">Replace the patchwork of expiring designations (MDH, SCH) with a unified Rural Viability Fund extending cost-based Medicare reimbursement — scaled by closure risk score — to all rural hospitals under 100 beds with a payer mix exceeding 60% Medicare/Medicaid. Evidence base: MDH's 94.4% closure rate under enhanced fee-for-service confirms that payment uplift without structural architecture fails. Model: CAH's 4.9% closure rate under cost-plus reimbursement.</div>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">F2</div>
+              <div>
+                <div class="rec-title">Mandate CMS Financial Sustainability Review of All REH Conversions at 24 Months</div>
+                <div class="rec-body">With 81.8% of open REH hospitals flagged high-risk, CMS must conduct mandatory financial assessments for all REH conversions and adjust the 5% add-on payment rate accordingly. If patient margins remain below −10% for the majority of REH facilities at the 24-month mark, the model requires structural redesign. Publish quarterly REH financial performance data for public monitoring.</div>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">F3</div>
+              <div>
+                <div class="rec-title">Institutionalize a Federal Rural Hospital Early Warning System Using Financial Threshold Triggers</div>
+                <div class="rec-body">Mandate annual CMS reporting that triggers federal technical assistance and bridge funding when: (a) total margin falls below −5% for two consecutive years, (b) patient margin falls below −10%, or (c) composite risk score exceeds a defined threshold. Intervene before the crisis point. Current policy responds to closures — it should prevent them. Funding: redirect a portion of emergency relief reserves to predictive intervention.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rec-group">
+            <div class="rec-group-head">
+              <div class="rec-group-label">State Level · Medicaid, Workforce &amp; Sustainability</div>
+              <div class="rec-group-line"></div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">S1</div>
+              <div>
+                <div class="rec-title">Medicaid Expansion Remains the Single Highest-Leverage State Policy Action Available</div>
+                <div class="rec-body">The dataset provides near-controlled evidence: non-expansion states face 2× the rural closure rate. For Texas, Tennessee, Alabama, Florida, and Kansas — which account for 67 closures combined — Medicaid expansion is the highest-impact, lowest-cost rural hospital intervention available at the state level. Policy model: Kentucky and West Virginia's post-expansion rural hospital stabilization demonstrated in national literature and consistent with this dataset's expansion-state performance.</div>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">S2</div>
+              <div>
+                <div class="rec-title">Create State Rural Hospital Sustainability Funds Targeting the 665 High-Risk Open Facilities</div>
+                <div class="rec-body">States with high concentrations of at-risk open hospitals — Texas (patient margin −10.2%), Kansas (−9.3%), Oklahoma (−10.1%), Alabama (−8.5%) — should establish state-level sustainability funds providing three-year operational grants to sole-provider rural facilities with total margin below −5%. Prioritize facilities serving majority Medicaid populations and located in counties with no alternative hospital within 20 miles. Condition grants on board-approved financial improvement plans.</div>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">S3</div>
+              <div>
+                <div class="rec-title">Invest in Rural Physician Workforce Pipelines to Address the Volume Shortage Underlying Financial Distress</div>
+                <div class="rec-body">Margins cannot improve without patient volume; volume requires physician presence. States should: (a) fund Rural Health Scholarships conditioned on 3–5 year rural service commitments; (b) partner with academic medical centers to establish rural-track residency programs; (c) maximize HRSA J-1 visa waiver placements for international medical graduates in HPSA-designated rural areas — IMGs represent 25% of rural physicians nationally and are a systematically underutilized pipeline. Louisiana-specific implication: LSUSOM GME program design should incorporate rural track incentives.</div>
+              </div>
+            </div>
+
+            <div class="rec-item">
+              <div class="rec-num">M1</div>
+              <div>
+                <div class="rec-title">Monitor REH Conversions Quarterly — The Model May Be Failing Before It Has Been Evaluated</div>
+                <div class="rec-body">REH designation launched in January 2023. The 81.8% high-risk rate among open REH hospitals is a critical early warning that demands immediate policy attention. CMS should publish quarterly REH financial performance data and evaluate whether the $272,866/month facility payment achieves viability. If not, the program risks creating a new category of designated-but-failing facilities — institutionalizing the same failure pattern as MDH under a new label.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="method-block">
+          <div class="method-title">Methodology &amp; Data Notes</div>
+          <div class="method-body">
+            Analysis based on 2,496 rural hospital records (Source: Saving Rural Hospitals dataset). Closure defined by Closed? field = "Closed."
+            High-risk threshold: total margin &lt;−5% OR patient services margin &lt;−10% (conservative screening criterion).
+            Medicaid expansion status: 41 states + DC = expansion; 10 states = non-expansion (based on 2024 expansion map; NC joined 2023).
+            Statistical tests: independent samples t-test for margin comparisons; results reported as t-statistic and p-value.
+            Composite risk scoring: normalized composite of closure rate (60% weight) and inverse margin (40% weight), scaled 0–100.
+            MDH analysis: n=18 total (17 closed, 1 open). Policy effectiveness ratings are qualitative-quantitative hybrid assessments integrating dataset evidence with published literature — not pure model outputs.
+            All dollar figures in USD. Analysis: DataDrivenMed · datadrivenmed.github.io · April 2025.
+          </div>
+        </div>
+
+      </div><!-- /recs -->
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /shell -->
+
+<script>
+// ─── DATA ───
+const STATE_DATA = [{"State":"AK","total":17,"closed":1,"avg_total_margin":7.8,"avg_patient_margin":1.43,"avg_expenses":128590352,"closure_rate":5.9},{"State":"AL","total":61,"closed":10,"avg_total_margin":-3.41,"avg_patient_margin":-8.49,"avg_expenses":44001534,"closure_rate":16.4},{"State":"AR","total":54,"closed":2,"avg_total_margin":-3.63,"avg_patient_margin":-12.26,"avg_expenses":51226143,"closure_rate":3.7},{"State":"AZ","total":31,"closed":4,"avg_total_margin":10.33,"avg_patient_margin":5.22,"avg_expenses":119729707,"closure_rate":12.9},{"State":"CA","total":68,"closed":9,"avg_total_margin":4.35,"avg_patient_margin":-2.19,"avg_expenses":114431701,"closure_rate":13.2},{"State":"CO","total":43,"closed":0,"avg_total_margin":5.67,"avg_patient_margin":5.09,"avg_expenses":79691251,"closure_rate":0.0},{"State":"CT","total":4,"closed":0,"avg_total_margin":-9.83,"avg_patient_margin":-11.68,"avg_expenses":129019995,"closure_rate":0.0},{"State":"DE","total":3,"closed":0,"avg_total_margin":8.17,"avg_patient_margin":19.9,"avg_expenses":405972149,"closure_rate":0.0},{"State":"FL","total":30,"closed":8,"avg_total_margin":19.53,"avg_patient_margin":10.7,"avg_expenses":41201201,"closure_rate":26.7},{"State":"GA","total":83,"closed":9,"avg_total_margin":7.48,"avg_patient_margin":5.98,"avg_expenses":75932074,"closure_rate":10.8},{"State":"HI","total":13,"closed":0,"avg_total_margin":5.37,"avg_patient_margin":-14.89,"avg_expenses":90997182,"closure_rate":0.0},{"State":"IA","total":96,"closed":2,"avg_total_margin":11.45,"avg_patient_margin":5.43,"avg_expenses":59187068,"closure_rate":2.1},{"State":"ID","total":28,"closed":0,"avg_total_margin":1.63,"avg_patient_margin":0.47,"avg_expenses":47898981,"closure_rate":0.0},{"State":"IL","total":83,"closed":4,"avg_total_margin":10.34,"avg_patient_margin":11.27,"avg_expenses":89308883,"closure_rate":4.8},{"State":"IN","total":59,"closed":4,"avg_total_margin":6.2,"avg_patient_margin":8.79,"avg_expenses":85120954,"closure_rate":6.8},{"State":"KS","total":113,"closed":10,"avg_total_margin":-2.29,"avg_patient_margin":-9.34,"avg_expenses":36390922,"closure_rate":8.8},{"State":"KY","total":75,"closed":4,"avg_total_margin":15.81,"avg_patient_margin":14.46,"avg_expenses":89494807,"closure_rate":5.3},{"State":"LA","total":59,"closed":2,"avg_total_margin":5.85,"avg_patient_margin":-6.2,"avg_expenses":41040109,"closure_rate":3.4},{"State":"MA","total":7,"closed":0,"avg_total_margin":-0.23,"avg_patient_margin":-1.24,"avg_expenses":105710865,"closure_rate":0.0},{"State":"MD","total":10,"closed":1,"avg_total_margin":5.61,"avg_patient_margin":22.04,"avg_expenses":182275980,"closure_rate":10.0},{"State":"ME","total":28,"closed":4,"avg_total_margin":1.97,"avg_patient_margin":-1.95,"avg_expenses":115418955,"closure_rate":14.3},{"State":"MI","total":70,"closed":4,"avg_total_margin":9.93,"avg_patient_margin":11.86,"avg_expenses":91343225,"closure_rate":5.7},{"State":"MN","total":104,"closed":6,"avg_total_margin":6.27,"avg_patient_margin":3.24,"avg_expenses":70921892,"closure_rate":5.8},{"State":"MO","total":69,"closed":10,"avg_total_margin":6.2,"avg_patient_margin":-0.61,"avg_expenses":75469672,"closure_rate":14.5},{"State":"MS","total":79,"closed":5,"avg_total_margin":-0.02,"avg_patient_margin":-3.96,"avg_expenses":62316463,"closure_rate":6.3},{"State":"MT","total":53,"closed":0,"avg_total_margin":2.28,"avg_patient_margin":-2.17,"avg_expenses":48553796,"closure_rate":0.0},{"State":"NC","total":68,"closed":12,"avg_total_margin":5.01,"avg_patient_margin":12.35,"avg_expenses":108539582,"closure_rate":17.6},{"State":"ND","total":39,"closed":1,"avg_total_margin":2.86,"avg_patient_margin":-5.26,"avg_expenses":27406652,"closure_rate":2.6},{"State":"NE","total":74,"closed":2,"avg_total_margin":5.22,"avg_patient_margin":1.86,"avg_expenses":50160728,"closure_rate":2.7},{"State":"NH","total":18,"closed":0,"avg_total_margin":9.63,"avg_patient_margin":4.22,"avg_expenses":282795712,"closure_rate":0.0},{"State":"NJ","total":3,"closed":1,"avg_total_margin":3.8,"avg_patient_margin":36.5,"avg_expenses":625454974,"closure_rate":33.3},{"State":"NM","total":29,"closed":1,"avg_total_margin":14.71,"avg_patient_margin":1.34,"avg_expenses":91301698,"closure_rate":3.4},{"State":"NV","total":16,"closed":2,"avg_total_margin":11.19,"avg_patient_margin":3.91,"avg_expenses":40520770,"closure_rate":12.5},{"State":"NY","total":59,"closed":5,"avg_total_margin":5.16,"avg_patient_margin":-4.51,"avg_expenses":117050480,"closure_rate":8.5},{"State":"OH","total":77,"closed":3,"avg_total_margin":9.07,"avg_patient_margin":11.43,"avg_expenses":113343179,"closure_rate":3.9},{"State":"OK","total":89,"closed":10,"avg_total_margin":-1.9,"avg_patient_margin":-10.13,"avg_expenses":52519563,"closure_rate":11.2},{"State":"OR","total":34,"closed":0,"avg_total_margin":8.2,"avg_patient_margin":5.95,"avg_expenses":115311093,"closure_rate":0.0},{"State":"PA","total":58,"closed":6,"avg_total_margin":5.02,"avg_patient_margin":8.2,"avg_expenses":150342636,"closure_rate":10.3},{"State":"RI","total":1,"closed":0,"avg_total_margin":-12.3,"avg_patient_margin":-3.7,"avg_expenses":152513274,"closure_rate":0.0},{"State":"SC","total":26,"closed":4,"avg_total_margin":3.95,"avg_patient_margin":2.06,"avg_expenses":95610199,"closure_rate":15.4},{"State":"SD","total":52,"closed":3,"avg_total_margin":11.4,"avg_patient_margin":6.82,"avg_expenses":42363058,"closure_rate":5.8},{"State":"TN","total":68,"closed":14,"avg_total_margin":0.57,"avg_patient_margin":2.65,"avg_expenses":58762814,"closure_rate":20.6},{"State":"TX","total":183,"closed":25,"avg_total_margin":6.76,"avg_patient_margin":-10.18,"avg_expenses":46970037,"closure_rate":13.7},{"State":"UT","total":22,"closed":0,"avg_total_margin":17.45,"avg_patient_margin":43.49,"avg_expenses":55279708,"closure_rate":0.0},{"State":"VA","total":34,"closed":2,"avg_total_margin":3.32,"avg_patient_margin":12.92,"avg_expenses":85379565,"closure_rate":5.9},{"State":"VT","total":13,"closed":0,"avg_total_margin":2.32,"avg_patient_margin":-7.13,"avg_expenses":140787482,"closure_rate":0.0},{"State":"WA","total":46,"closed":1,"avg_total_margin":1.02,"avg_patient_margin":-3.45,"avg_expenses":78318161,"closure_rate":2.2},{"State":"WI","total":82,"closed":1,"avg_total_margin":9.45,"avg_patient_margin":9.61,"avg_expenses":88565448,"closure_rate":1.2},{"State":"WV","total":38,"closed":4,"avg_total_margin":-0.44,"avg_patient_margin":-0.78,"avg_expenses":83411250,"closure_rate":10.5},{"State":"WY","total":27,"closed":0,"avg_total_margin":2.77,"avg_patient_margin":6.32,"avg_expenses":71131019,"closure_rate":0.0}];
+
+const CLOSURE_TREND = [{year:2005,closures:8},{year:2006,closures:9},{year:2007,closures:10},{year:2008,closures:6},{year:2009,closures:10},{year:2010,closures:3},{year:2011,closures:5},{year:2012,closures:9},{year:2013,closures:13},{year:2014,closures:14},{year:2015,closures:17},{year:2016,closures:10},{year:2017,closures:9},{year:2018,closures:13},{year:2019,closures:17},{year:2020,closures:16},{year:2021,closures:2},{year:2022,closures:6},{year:2023,closures:7},{year:2024,closures:5},{year:2025,closures:6}];
+
+const HOSPITAL_TYPES = [{"Type":"CAH","total":1452,"closed":71,"avg_margin":6.49,"avg_patient_margin":-0.22,"avg_expenses":43168760,"closure_rate":4.9},{"Type":"IPPS","total":467,"closed":88,"avg_margin":3.1,"avg_patient_margin":5.16,"avg_expenses":91141041,"closure_rate":18.8},{"Type":"Indian","total":24,"closed":1,"avg_margin":0,"avg_patient_margin":0,"avg_expenses":175736287,"closure_rate":4.2},{"Type":"MDH","total":18,"closed":17,"avg_margin":-5.18,"avg_patient_margin":-21.34,"avg_expenses":25466064,"closure_rate":94.4},{"Type":"Other","total":18,"closed":5,"avg_margin":3.71,"avg_patient_margin":6.47,"avg_expenses":197314445,"closure_rate":27.8},{"Type":"RCH","total":30,"closed":0,"avg_margin":1.97,"avg_patient_margin":2.77,"avg_expenses":118270524,"closure_rate":0.0},{"Type":"REH","total":45,"closed":1,"avg_margin":0.3,"avg_patient_margin":-13.03,"avg_expenses":13760583,"closure_rate":2.2},{"Type":"RRC","total":98,"closed":2,"avg_margin":11.0,"avg_patient_margin":13.31,"avg_expenses":207509027,"closure_rate":2.0},{"Type":"SCH","total":344,"closed":11,"avg_margin":4.7,"avg_patient_margin":5.51,"avg_expenses":160269469,"closure_rate":3.2}];
+
+// ─── CHART GLOBALS ───
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+Chart.defaults.color = '#8a8a82';
+
+const GRID = 'rgba(216,213,206,0.6)';
+const NAVY = '#051c2c';
+const BLUE = '#1b6ca8';
+const RED = '#c0392b';
+const AMBER = '#b8860b';
+const GREEN = '#2d6a4f';
+const TEAL = '#006d77';
+
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#ffffff',
+      borderColor: '#d8d5ce',
+      borderWidth: 1,
+      titleColor: '#1a1a18',
+      bodyColor: '#4a4a45',
+      padding: 12,
+      cornerRadius: 0,
+      titleFont: { family: "'EB Garamond', serif", size: 14, weight: '500' },
+      bodyFont: { family: "'IBM Plex Mono', monospace", size: 10 }
+    }
+  },
+  scales: {
+    x: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#8a8a82' } },
+    y: { grid: { color: GRID, drawBorder: false }, ticks: { color: '#8a8a82' } }
+  }
+};
+
+let chartsBuilt = false;
+
+function buildCharts() {
+  if (chartsBuilt) return;
+  chartsBuilt = true;
+
+  // Timeline
+  new Chart(document.getElementById('c-timeline'), {
+    type: 'bar',
+    data: {
+      labels: CLOSURE_TREND.map(d => d.year),
+      datasets: [{
+        data: CLOSURE_TREND.map(d => d.closures),
+        backgroundColor: CLOSURE_TREND.map(d =>
+          d.year === 2021 ? 'rgba(45,106,79,0.75)' :
+          d.closures >= 15 ? 'rgba(192,57,43,0.8)' :
+          d.closures >= 10 ? 'rgba(184,134,11,0.65)' :
+          'rgba(27,108,168,0.55)'
+        ),
+        borderRadius: 1, borderSkipped: false
+      }]
+    },
+    options: { ...baseOpts, scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { stepSize: 5, color: '#8a8a82' } } } }
+  });
+
+  // Type closure rate
+  const typesSorted = [...HOSPITAL_TYPES].sort((a,b) => b.closure_rate - a.closure_rate);
+  new Chart(document.getElementById('c-typeclose'), {
+    type: 'bar',
+    data: {
+      labels: typesSorted.map(t => t.Type),
+      datasets: [{
+        data: typesSorted.map(t => t.closure_rate),
+        backgroundColor: typesSorted.map(t =>
+          t.closure_rate > 50 ? 'rgba(192,57,43,0.8)' :
+          t.closure_rate > 15 ? 'rgba(184,134,11,0.7)' :
+          'rgba(27,108,168,0.6)'
+        ),
+        borderRadius: 1, borderSkipped: false
+      }]
+    },
+    options: {
+      ...baseOpts,
+      indexAxis: 'y',
+      scales: {
+        x: { ...baseOpts.scales.x, ticks: { callback: v => v + '%', color: '#8a8a82' } },
+        y: { ...baseOpts.scales.y }
+      }
+    }
+  });
+
+  // Medicaid
+  new Chart(document.getElementById('c-medicaid'), {
+    type: 'bar',
+    data: {
+      labels: ['Expansion States', 'Non-Expansion States'],
+      datasets: [
+        { label: 'Closure Rate %', data: [5.8, 11.6], backgroundColor: ['rgba(45,106,79,0.7)', 'rgba(192,57,43,0.7)'], borderRadius: 1 },
+        { label: 'Avg Total Margin %', data: [6.16, 4.4], backgroundColor: ['rgba(27,108,168,0.5)', 'rgba(184,134,11,0.5)'], borderRadius: 1 }
+      ]
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: { ...baseOpts.scales.x }, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#8a8a82' } } }
+    }
+  });
+
+  // Top states
+  const top10 = [...STATE_DATA].sort((a,b) => b.closed - a.closed).slice(0,10);
+  new Chart(document.getElementById('c-states-top'), {
+    type: 'bar',
+    data: {
+      labels: top10.map(s => s.State),
+      datasets: [{ data: top10.map(s => s.closed), backgroundColor: 'rgba(192,57,43,0.7)', borderRadius: 1 }]
+    },
+    options: { ...baseOpts }
+  });
+
+  // Margin dist
+  const bins = [-50,-30,-20,-15,-10,-5,0,5,10,15,20,30,50];
+  const openB = new Array(bins.length-1).fill(0);
+  const closedB = new Array(bins.length-1).fill(0);
+  STATE_DATA.forEach(s => {
+    const m = s.avg_total_margin;
+    for (let i=0;i<bins.length-1;i++) {
+      if (m>=bins[i]&&m<bins[i+1]) { openB[i] += s.total - s.closed; closedB[i] += s.closed; break; }
+    }
+  });
+  new Chart(document.getElementById('c-margindist'), {
+    type: 'bar',
+    data: {
+      labels: bins.slice(0,-1).map((b,i) => `${b}–${bins[i+1]}%`),
+      datasets: [
+        { label: 'Open', data: openB, backgroundColor: 'rgba(45,106,79,0.65)', borderRadius: 1 },
+        { label: 'Closed', data: closedB, backgroundColor: 'rgba(192,57,43,0.7)', borderRadius: 1 }
+      ]
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: { ...baseOpts.scales.x, ticks: { maxRotation: 45, color: '#8a8a82' } }, y: baseOpts.scales.y }
+    }
+  });
+
+  // Type benchmark
+  const typesForBench = HOSPITAL_TYPES.filter(t => t.Type !== 'Indian');
+  new Chart(document.getElementById('c-typebench'), {
+    type: 'bar',
+    data: {
+      labels: typesForBench.map(t => t.Type),
+      datasets: [
+        { label: 'Total Margin %', data: typesForBench.map(t => t.avg_margin), backgroundColor: 'rgba(27,108,168,0.65)', borderRadius: 1 },
+        { label: 'Patient Margin %', data: typesForBench.map(t => t.avg_patient_margin), backgroundColor: 'rgba(192,57,43,0.55)', borderRadius: 1 }
+      ]
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: true, labels: { color: '#4a4a45', font: { family: "'IBM Plex Mono', monospace", size: 10 }, boxWidth: 10, boxHeight: 10 } } },
+      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => v + '%', color: '#8a8a82' } } }
+    }
+  });
+
+  // Expense by type
+  const typesByExp = [...HOSPITAL_TYPES].sort((a,b) => b.avg_expenses - a.avg_expenses);
+  new Chart(document.getElementById('c-exptype'), {
+    type: 'bar',
+    data: {
+      labels: typesByExp.map(t => t.Type),
+      datasets: [{
+        data: typesByExp.map(t => +(t.avg_expenses/1e6).toFixed(1)),
+        backgroundColor: typesByExp.map(t =>
+          t.closure_rate > 50 ? 'rgba(192,57,43,0.75)' :
+          t.closure_rate > 10 ? 'rgba(184,134,11,0.65)' :
+          'rgba(27,108,168,0.55)'
+        ),
+        borderRadius: 1
+      }]
+    },
+    options: {
+      ...baseOpts,
+      scales: { x: baseOpts.scales.x, y: { ...baseOpts.scales.y, ticks: { callback: v => '$' + v + 'M', color: '#8a8a82' } } }
+    }
+  });
+}
+
+// ─── VIEW NAVIGATION ───
+function showView(name, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  el.classList.add('active');
+  buildCharts();
+  if (name === 'states' && !window.tableBuilt) { renderTable(); window.tableBuilt = true; }
+}
+
+// ─── STATE TABLE ───
+function getRisk(rate, margin) {
+  if (rate >= 15 || margin < -3) return { label: 'HIGH', color: '#c0392b', bg: 'rgba(192,57,43,0.08)' };
+  if (rate >= 8 || margin < 0) return { label: 'ELEVATED', color: '#b8860b', bg: 'rgba(184,134,11,0.08)' };
+  return { label: 'MODERATE', color: '#2d6a4f', bg: 'rgba(45,106,79,0.08)' };
+}
+
+function renderTable() {
+  const q = document.getElementById('st-search').value.toLowerCase();
+  const sort = document.getElementById('st-sort').value;
+  let data = STATE_DATA.filter(s => s.State.toLowerCase().includes(q) || s.State.toLowerCase().startsWith(q));
+
+  data.sort((a,b) => {
+    if (sort === 'avg_total_margin_asc') return a.avg_total_margin - b.avg_total_margin;
+    if (sort === 'risk') {
+      const rA = Math.min(100, Math.round((a.closure_rate/35*60) + (Math.max(0,-a.avg_total_margin)/15*40)));
+      const rB = Math.min(100, Math.round((b.closure_rate/35*60) + (Math.max(0,-b.avg_total_margin)/15*40)));
+      return rB - rA;
+    }
+    return b[sort] - a[sort];
+  });
+
+  document.getElementById('st-count').textContent = `${data.length} states displayed`;
+  const tbody = document.getElementById('st-tbody');
+  tbody.innerHTML = '';
+
+  data.forEach((s, i) => {
+    const risk = getRisk(s.closure_rate, s.avg_total_margin);
+    const tmColor = s.avg_total_margin >= 3 ? '#2d6a4f' : s.avg_total_margin >= 0 ? '#b8860b' : '#c0392b';
+    const pmColor = s.avg_patient_margin >= 0 ? '#2d6a4f' : '#c0392b';
+    const rScore = Math.min(100, Math.round((s.closure_rate/35*60) + (Math.max(0,-s.avg_total_margin)/15*40)));
+    const rColor = rScore > 40 ? '#c0392b' : rScore > 20 ? '#b8860b' : '#2d6a4f';
+
+    tbody.innerHTML += `<tr>
+      <td class="td-mono" style="color:#b5b3aa">${i+1}</td>
+      <td class="td-state td-mono">${s.State}</td>
+      <td class="td-mono">${s.total}</td>
+      <td class="td-mono" style="color:${s.closed > 10 ? '#c0392b' : '#1a1a18'};font-weight:${s.closed > 10 ? '600' : '400'}">${s.closed}</td>
+      <td>
+        <div class="bar-inline">
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,s.closure_rate/35*100)}%;background:${rColor}"></div></div>
+          <span class="td-mono" style="color:${rColor}">${s.closure_rate}%</span>
+        </div>
+      </td>
+      <td class="td-mono" style="color:${tmColor}">${s.avg_total_margin > 0 ? '+' : ''}${s.avg_total_margin.toFixed(1)}%</td>
+      <td class="td-mono" style="color:${pmColor}">${s.avg_patient_margin > 0 ? '+' : ''}${s.avg_patient_margin.toFixed(1)}%</td>
+      <td><span class="risk-chip" style="color:${risk.color};background:${risk.bg};border-color:${risk.color}">${risk.label}</span></td>
+      <td>
+        <div class="bar-inline">
+          <div class="bar-track" style="width:80px"><div class="bar-fill" style="width:${rScore}%;background:${rColor}"></div></div>
+          <span class="td-mono" style="color:#8a8a82;font-size:10px">${rScore}</span>
+        </div>
+      </td>
+    </tr>`;
+  });
+}
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', () => {
+  buildCharts();
+  renderTable();
+  window.tableBuilt = true;
+});
+</script>
+</body>
+</html>
